@@ -6,34 +6,27 @@ import nltk
 from nltk import ngrams
 from nltk.tokenize import word_tokenize
 
-# Download required NLTK data (run once)
 nltk.download('punkt')
 
 def calculate_perplexity(text, n=2):
     """Calculates the perplexity of text using a simple n-gram model."""
     try:
-        # Preprocessing: Remove punctuation and convert to lowercase
         text = re.sub(r'[^\w\s]', '', text.lower())
-        
-        # Tokenize the text
+    
         tokens = word_tokenize(text)
         
         if not tokens:
             return 0.0
         
-        # Generate n-grams
         n_grams = list(ngrams(tokens, n))
         
         if not n_grams:
             return 0.0
         
-        # Count frequency of each n-gram
         freq_dist = Counter(n_grams)
         
-        # Total number of n-grams
         N = len(n_grams)
         
-        # Calculate log probabilities and sum them
         log_prob_sum = 0.0
         for ng in n_grams:
             count = freq_dist[ng]
@@ -41,10 +34,8 @@ def calculate_perplexity(text, n=2):
             if prob > 0:
                 log_prob_sum += math.log(prob)
         
-        # Calculate average log probability
         avg_log_prob = log_prob_sum / N
         
-        # Perplexity = exp(-average_log_prob)
         perplexity = math.exp(-avg_log_prob)
         
         return perplexity
@@ -53,7 +44,6 @@ def calculate_perplexity(text, n=2):
         print(f"Error calculating perplexity: {e}")
         return None
 
-# Example usage
 if __name__ == "__main__":
     sample_text = "This is a sample text for testing perplexity calculation."
     
@@ -62,4 +52,5 @@ if __name__ == "__main__":
     if result is not None:
         print(f"Perplexity: {result:.2f}")
     else:
+
         print("Failed to calculate perplexity.")
